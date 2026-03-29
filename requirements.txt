@@ -1,0 +1,5 @@
+Django
+mongoengine
+bcrypt
+python-dotenv
+gunicorn

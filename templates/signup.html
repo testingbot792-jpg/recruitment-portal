@@ -1,0 +1,10 @@
+<form method="post">
+  {% csrf_token %}
+  <input name="email">
+  <input name="password" type="password">
+  <select name="role">
+    <option value="admin">Admin</option>
+    <option value="candidate">Candidate</option>
+  </select>
+  <button type="submit">Signup</button>
+</form>
