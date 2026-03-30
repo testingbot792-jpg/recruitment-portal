@@ -1,10 +1,18 @@
-<form method="post">
-  {% csrf_token %}
-  <input name="email">
-  <input name="password" type="password">
-  <select name="role">
-    <option value="admin">Admin</option>
-    <option value="candidate">Candidate</option>
-  </select>
-  <button type="submit">Signup</button>
-</form>
+<div class="container mt-5">
+  <h3>Signup</h3>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <input name="email" class="form-control mb-2" placeholder="Email">
+
+    <input name="password" type="password" class="form-control mb-2" placeholder="Password">
+
+    <select name="role" class="form-control mb-2">
+      <option value="admin">Admin</option>
+      <option value="candidate">Candidate</option>
+    </select>
+
+    <button class="btn btn-success">Signup</button>
+  </form>
+</div>
