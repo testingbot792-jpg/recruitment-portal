@@ -1,15 +1,20 @@
 from .models import User
-from core.utils import hash_password, check_password
+import bcrypt
 
 def create_user(email, password, role):
-    return User(
+    hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    user = User(
         email=email,
-        password=hash_password(password),
+        password=hashed_pw,
         role=role
-    ).save()
+    )
+    user.save()
+    return user
+
 
 def authenticate_user(email, password):
     user = User.objects(email=email).first()
-    if user and check_password(password, user.password):
+    if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
         return user
     return None
