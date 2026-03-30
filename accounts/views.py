@@ -24,3 +24,6 @@ def login_view(request):
             request.session['role'] = user.role
             return redirect('/dashboard/')
     return render(request, 'login.html')
+
+def dashboard(request):   # 👈 ADD THIS
+    return render(request, 'dashboard.html')
