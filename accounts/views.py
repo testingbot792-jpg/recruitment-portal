@@ -25,5 +25,5 @@ def login_view(request):
             return redirect('/dashboard/')
     return render(request, 'login.html')
 
-def dashboard(request):   # 👈 ADD THIS
-    return render(request, 'dashboard.html')
+def dashboard(request): 
+    return render(request, 'templates/dashboard.html')

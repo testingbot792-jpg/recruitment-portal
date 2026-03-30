@@ -1,10 +1,124 @@
-<h2>Add Job</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Job</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-<form method="post" action="/jobs/add/">
-  {% csrf_token %}
-  <input name="title" placeholder="Title">
-  <input name="company" placeholder="Company">
-  <textarea name="description"></textarea>
-  <button type="submit">Add Job</button>
-  <a href="/jobs/add/">Add Job</a>
-</form>
+    body {
+      background: #f4f6f9;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      text-decoration: none;
+      color: #007bff;
+      font-size: 14px;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    .header {
+      background: #007bff;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">Job Dashboard</div>
+
+  <div class="container">
+    <h2>Add Job</h2>
+
+    <form method="post" action="/jobs/add/">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <input name="title" placeholder="Job Title" required>
+      </div>
+
+      <div class="form-group">
+        <input name="company" placeholder="Company Name" required>
+      </div>
+
+      <div class="form-group">
+        <textarea name="description" placeholder="Job Description" required></textarea>
+      </div>
+
+      <button type="submit">Add Job</button>
+    </form>
+
+    <a class="link" href="/jobs/">View All Jobs</a>
+  </div>
+
+</body>
+</html>
