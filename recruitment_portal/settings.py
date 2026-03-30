@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -124,7 +125,6 @@ from mongoengine import connect
 connect(host=os.getenv("MONGO_URI"))
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
