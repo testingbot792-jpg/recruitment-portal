@@ -26,4 +26,4 @@ def login_view(request):
     return render(request, 'login.html')
 
 def dashboard(request): 
-    return render(request, 'templates/dashboard.html')
+    return render(request, 'dashboard.html')
