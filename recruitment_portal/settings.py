@@ -17,7 +17,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
