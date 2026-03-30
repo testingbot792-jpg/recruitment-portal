@@ -14,7 +14,7 @@ def add_job(request):
     if request.method == "POST":
         create_job(request.POST, request.session['user_id'])
         return redirect('/jobs/')
-    return redirect('/dashboard/')
+    return redirect('add_job.html')
 
 
 @login_required

@@ -1,8 +1,8 @@
 from mongoengine import Document, StringField
 
 class Job(Document):
-    title = StringField()
-    description = StringField()
+    title = StringField(required=True)
+    description = StringField(required=True)
     company = StringField()
     created_by = StringField()
 
