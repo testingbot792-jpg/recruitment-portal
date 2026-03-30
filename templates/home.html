@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recruitment Portal</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f4f6f9;
+        }
+
+        .navbar {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 60px;
+        }
+
+        .left {
+            width: 50%;
+        }
+
+        .right {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .signup-btn {
+            background: #2ecc71;
+            margin-top: 10px;
+        }
+
+        .section {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>Recruitment Portal</h2>
+    <div>
+        <a href="/login/" style="color:white;">Login</a>
+    </div>
+</div>
+
+<!-- HERO SECTION -->
+<div class="container">
+    <div class="left">
+        <h1>Find Your Dream Job</h1>
+        <p>Connect with top companies and apply for jobs easily.</p>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="right">
+        <h3>Login</h3>
+        <form method="post" action="/login/">
+            {% csrf_token %}
+            <input name="email" placeholder="Email">
+            <input name="password" type="password" placeholder="Password">
+
+            <button type="submit">Login</button>
+        </form>
+
+        <a href="/signup/">
+            <button class="signup-btn">Signup</button>
+        </a>
+    </div>
+</div>
+
+<!-- ABOUT SECTION -->
+<div class="section">
+    <h2>About Us</h2>
+    <p>
+        We help companies find the best talent and candidates find the perfect job.
+        Our platform is fast, secure, and easy to use.
+    </p>
+</div>
+
+<!-- FEATURES -->
+<div class="section" style="background:#ecf0f1;">
+    <h2>Why Choose Us?</h2>
+    <p>✔ Easy Job Posting</p>
+    <p>✔ Instant Applications</p>
+    <p>✔ Secure Platform</p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>© 2026 Recruitment Portal</p>
+</div>
+
+</body>
+</html>
