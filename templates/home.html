@@ -2,72 +2,296 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Recruitment Portal</title>
+  <title>MD Recruitment Consultancy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #f5f7fb;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.9);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+    }
+
+    .job-card {
+      border-radius: 16px;
+      transition: 0.3s ease;
+      border: none;
+    }
+
+    .job-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+
+    .btn {
+      border-radius: 10px;
+    }
+
+    footer {
+      background: #111827;
+      color: #9ca3af;
+      padding: 25px;
+      text-align: center;
+    }
+  </style>
 </head>
 
-<body class="bg-light">
+<body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg shadow-sm">
   <div class="container">
-    <a class="navbar-brand" href="/">Recruitment Portal</a>
+    <a class="navbar-brand fw-bold text-primary">MD Consultancy</a>
+
+    <div class="ms-auto">
+      {% if request.session.user_id %}
+        <a href="/jobs/" class="btn btn-outline-dark me-2">Jobs</a>
+        <a href="/logout/" class="btn btn-danger">Logout</a>
+      {% else %}
+        <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+          Login
+        </button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">
+          Signup
+        </button>
+      {% endif %}
+    </div>
   </div>
 </nav>
 
-<!-- MAIN SECTION -->
-<div class="container mt-5">
+<!-- LOGIN MODAL -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4 rounded-4">
+      <h4 class="mb-3">Login</h4>
+
+      <form method="POST" action="/">
+        {% csrf_token %}
+        <input name="email" class="form-control mb-3" placeholder="Email" required>
+        <input name="password" type="password" class="form-control mb-3" placeholder="Password" required>
+
+        <button class="btn btn-primary w-100">Login</button>
+      </form>
+
+      {% if error %}
+        <p class="text-danger mt-2">{{ error }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal fade" id="signupModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-4 rounded-4">
+      <h4 class="mb-3">Signup</h4>
+
+      <form method="POST" action="/signup/">
+        {% csrf_token %}
+        <input name="email" class="form-control mb-3" placeholder="Email" required>
+        <input name="password" type="password" class="form-control mb-3" placeholder="Password" required>
+
+        <select name="role" class="form-control mb-3">
+          <option value="candidate">Candidate</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button class="btn btn-success w-100">Signup</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <h1>Find Your Dream Job</h1>
+    <p>Discover opportunities from top companies</p>
+
+    <form method="GET" class="row justify-content-center mt-4">
+      <div class="col-md-4 mb-2">
+        <input name="search" class="form-control"
+               placeholder="Job title"
+               value="{{ request.GET.search }}">
+      </div>
+
+      <div class="col-md-3 mb-2">
+        <input name="location" class="form-control"
+               placeholder="Location"
+               value="{{ request.GET.location }}">
+      </div>
+
+      <div class="col-md-2 mb-2">
+        <button class="btn btn-dark w-100">Search</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- JOBS -->
+<section class="container mt-5">
+  <h3 class="text-center mb-4">Latest Jobs</h3>
+
   <div class="row">
+    {% for job in jobs %}
+    <div class="col-md-4 mb-4">
 
-    <!-- LEFT SIDE (About) -->
-    <div class="col-md-6">
-      <h2>Welcome to Recruitment Portal</h2>
-      <p class="text-muted">
-        Find your dream job or hire the best talent easily.
-      </p>
+      <!-- 🔥 CLICKABLE CARD -->
+      <div class="card job-card p-4 h-100"
+           data-bs-toggle="modal"
+           data-bs-target="#jobModal{{ job.id }}"
+           style="cursor:pointer;">
 
-      <ul>
-        <li>✔ Easy job posting</li>
-        <li>✔ Apply in one click</li>
-        <li>✔ Secure authentication</li>
-      </ul>
+        <!-- Logo -->
+        {% if job.logo %}
+          <img src="{{ job.logo.url }}" class="mb-2" style="height:40px;">
+        {% endif %}
 
-      <a href="/signup/" class="btn btn-outline-primary mt-3">Create Account</a>
+        <h5>{{ job.title }}</h5>
+        <p class="text-muted">{{ job.company }}</p>
+        <p>{{ job.location }}</p>
+
+        <small class="text-muted">
+          Click to view details
+        </small>
+
+      </div>
     </div>
 
-    <!-- RIGHT SIDE (Login) -->
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="card-body">
-          <h4 class="text-center mb-4">Login</h4>
+    <!-- 🔥 JOB DETAILS MODAL -->
+    <div class="modal fade" id="jobModal{{ job.id }}" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content p-4">
 
-          <!-- ERROR MESSAGE -->
-          {% if error %}
-            <div class="alert alert-danger">{{ error }}</div>
+          <!-- HEADER -->
+          <div class="d-flex justify-content-between">
+            <div>
+              <h4>{{ job.title }}</h4>
+              <p class="text-muted">{{ job.company }} • {{ job.location }}</p>
+            </div>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <hr>
+
+          <!-- DETAILS -->
+          <h6>Job Description</h6>
+          <p>{{ job.description|default:"Not provided" }}</p>
+
+          <h6>Responsibilities</h6>
+          <p>{{ job.responsibilities|default:"Not provided" }}</p>
+
+          <h6>Qualifications</h6>
+          <p>{{ job.required_qualifications|default:"Not provided" }}</p>
+
+          <h6>Experience</h6>
+          <p>{{ job.experience_years|default:"Not specified" }}</p>
+
+          <h6>Salary</h6>
+          <p>{{ job.compensation|default:"Not disclosed" }}</p>
+
+          <hr>
+
+          <!-- ACTION BUTTON -->
+          {% if role == "candidate" %}
+
+            {% if job.id|stringformat:"s" in applied_jobs %}
+              <button class="btn btn-success w-100" disabled>
+                ✅ Already Applied
+              </button>
+            {% else %}
+              <a href="/jobs/apply/{{ job.id }}/"
+                 class="btn btn-primary w-100">
+                Apply Now
+              </a>
+            {% endif %}
+
+          {% elif role == "admin" %}
+
+            <div class="d-flex gap-2">
+              <a href="/jobs/edit/{{ job.id }}/" class="btn btn-warning w-50">
+                Edit
+              </a>
+              <a href="/jobs/delete/{{ job.id }}/" class="btn btn-danger w-50">
+                Delete
+              </a>
+            </div>
+
+          {% else %}
+            <!-- NOT LOGGED -->
+            <button class="btn btn-outline-primary w-100"
+                    data-bs-toggle="modal"
+                    data-bs-target="#loginModal">
+              Login to Apply
+            </button>
           {% endif %}
 
-          <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-              <input type="email" name="email" class="form-control" placeholder="Email" required>
-            </div>
-
-            <div class="mb-3">
-              <input type="password" name="password" class="form-control" placeholder="Password" required>
-            </div>
-
-            <button class="btn btn-primary w-100">Login</button>
-          </form>
-
-          <p class="text-center mt-3">
-            Don't have an account? <a href="/signup/">Signup</a>
-          </p>
         </div>
       </div>
     </div>
 
+    {% endfor %}
   </div>
-</div>
+</section>
+
+<!-- STATS -->
+<section class="container mt-5 text-center">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>{{ jobs_count }}</h2>
+      <p>Jobs</p>
+    </div>
+    <div class="col-md-4">
+      <h2>{{ users_count }}</h2>
+      <p>Users</p>
+    </div>
+    <div class="col-md-4">
+      <h2>50+</h2>
+      <p>Companies</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="container mt-5">
+  <h3 class="text-center">About Us</h3>
+  <p class="text-center text-muted">
+    We connect talented professionals with top companies.
+  </p>
+</section>
+
+<footer class="mt-5">
+  <p>© 2026 MD Consultancy</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- AUTO OPEN LOGIN MODAL -->
+{% if error %}
+<script>
+  var myModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  myModal.show();
+</script>
+{% endif %}
 
 </body>
 </html>

@@ -1,11 +1,35 @@
-<h2>Add Job</h2>
+{% extends 'base.html' %}
 
-<form method="POST">
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+  <h2 class="text-xl font-bold mb-4">
+    {% if job %}✏️ Edit Job{% else %}➕ Add Job{% endif %}
+  </h2>
+
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    
-    <input type="text" name="title" placeholder="Title"><br><br>
-    <textarea name="description" placeholder="Description"></textarea><br><br>
-    <input type="text" name="company" placeholder="Company"><br><br>
-    
-    <button type="submit">Add Job</button>
-</form>
+
+    <input name="title" value="{{ job.title }}" placeholder="Job Title" class="w-full p-2 border mb-3" required>
+    <input name="job_id" value="{{ job.job_id }}" placeholder="Job ID" class="w-full p-2 border mb-3">
+    <input name="department" value="{{ job.department }}" placeholder="Department" class="w-full p-2 border mb-3">
+    <input name="company" value="{{ job.company }}" placeholder="Company" class="w-full p-2 border mb-3">
+    <input name="location" value="{{ job.location }}" placeholder="Location" class="w-full p-2 border mb-3">
+
+    <textarea name="job_summary" class="w-full p-2 border mb-3" placeholder="Job Summary">{{ job.job_summary }}</textarea>
+    <textarea name="responsibilities" class="w-full p-2 border mb-3" placeholder="Responsibilities">{{ job.responsibilities }}</textarea>
+    <textarea name="required_qualifications" class="w-full p-2 border mb-3" placeholder="Required Qualifications">{{ job.required_qualifications }}</textarea>
+
+    <input name="experience_years" value="{{ job.experience_years }}" placeholder="Years of Experience" class="w-full p-2 border mb-3">
+
+    <input name="compensation" value="{{ job.compensation }}" placeholder="Salary / Compensation" class="w-full p-2 border mb-3">
+
+    <input type="file" name="logo" class="mb-3">
+
+    <button class="bg-blue-600 text-white px-4 py-2 rounded w-full">
+      Save Job
+    </button>
+  </form>
+</div>
+
+{% endblock %}

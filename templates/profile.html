@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+
+  <h2 class="text-xl font-bold mb-4">👤 My Profile</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Name -->
+    <input name="name"
+           value="{{ user.name }}"
+           class="w-full p-2 border mb-3 rounded"
+           placeholder="Full Name">
+
+    <!-- Email (readonly) -->
+    <input value="{{ user.email }}"
+           class="w-full p-2 border mb-3 rounded bg-gray-100"
+           readonly>
+
+    <!-- Phone -->
+    <input name="phone"
+           value="{{ user.phone }}"
+           class="w-full p-2 border mb-3 rounded"
+           placeholder="Mobile Number">
+
+    <!-- Address -->
+    <textarea name="address"
+              class="w-full p-2 border mb-3 rounded"
+              placeholder="Address">{{ user.address }}</textarea>
+
+    <!-- Resume Preview -->
+    {% if user.resume %}
+      <div class="mb-3">
+        <a href="/resume/{{ user.id }}/" class="text-blue-600 underline">
+          📄 View Resume
+        </a>
+      </div>
+    {% endif %}
+
+    <!-- Upload Resume -->
+    <input type="file" name="resume" class="mb-3 w-full">
+
+    <button class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600">
+      💾 Save Profile
+    </button>
+
+  </form>
+</div>
+
+{% endblock %}

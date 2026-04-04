@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="max-w-6xl mx-auto mt-6">
+
+  <!-- 👤 PROFILE SECTION -->
+  <div class="bg-white p-5 rounded-xl shadow mb-6">
+    <h2 class="text-xl font-bold mb-2">👤 My Profile</h2>
+
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Role:</strong> {{ user.role }}</p>
+
+    <!-- 📄 Resume Status -->
+    <div class="mt-3">
+      {% if user.resume %}
+        <p class="text-green-600 font-semibold">✅ Resume Uploaded</p>
+
+        <div class="flex gap-3 mt-2">
+          <a href="/resume/{{ user.id }}/" target="_blank"
+             class="bg-blue-500 text-white px-3 py-1 rounded">
+            View Resume
+          </a>
+
+          <form method="POST" action="/delete-resume/">
+            {% csrf_token %}
+            <button class="bg-red-500 text-white px-3 py-1 rounded">
+              Delete
+            </button>
+          </form>
+        </div>
+
+      {% else %}
+        <p class="text-red-500 font-semibold">❌ No Resume Uploaded</p>
+      {% endif %}
+    </div>
+
+    <!-- 📤 Upload Resume -->
+    <form method="POST" action="/upload-resume/" enctype="multipart/form-data" class="mt-4">
+      {% csrf_token %}
+
+      <input type="file" name="resume" required
+             class="border p-2 rounded w-full mb-2">
+
+      <button class="bg-green-500 text-white px-4 py-2 rounded w-full">
+        Upload / Update Resume
+      </button>
+    </form>
+  </div>
+
+  <!-- 💼 APPLICATIONS SECTION -->
+  <div class="bg-white p-5 rounded-xl shadow">
+
+    <h2 class="text-xl font-bold mb-4">📌 My Applications</h2>
+
+    {% if jobs %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-3">Job</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for job in jobs %}
+          <tr class="border-t hover:bg-gray-50">
+            <td class="p-3 font-semibold">{{ job.title }}</td>
+            <td>{{ job.company }}</td>
+            <td>{{ job.location }}</td>
+            <td>
+              <span class="px-3 py-1 rounded text-white
+                {% if job.status == 'applied' %}
+                  bg-blue-500
+                {% elif job.status == 'shortlisted' %}
+                  bg-green-500
+                {% elif job.status == 'rejected' %}
+                  bg-red-500
+                {% else %}
+                  bg-gray-500
+                {% endif %}
+              ">
+                {{ job.status }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+    {% else %}
+      <p class="text-gray-500">No applications yet.</p>
+    {% endif %}
+
+  </div>
+
+</div>
+
+{% endblock %}

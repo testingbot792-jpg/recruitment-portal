@@ -1,0 +1,14 @@
+<div class="container mt-5">
+  <h3>Jobs at {{ company }}</h3>
+
+  {% for job in jobs %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5>{{ job.title }}</h5>
+        <p>{{ job.location }}</p>
+
+        <a href="/apply/{{ job.id }}/" class="btn btn-success">Apply</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>

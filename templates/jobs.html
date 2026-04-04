@@ -1,7 +1,169 @@
-<h2>Jobs</h2>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="text-3xl font-bold mb-8 text-gray-800">
+  Available Jobs
+</h2>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
 
 {% for job in jobs %}
-  <h3>{{ job.title }}</h3>
-  <p>{{ job.description }}</p>
-  <a href="/jobs/apply/{{ job.id }}">Apply</a>
+<div class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition border flex flex-col justify-between h-full">
+
+  <!-- TOP -->
+  <div>
+
+    <!-- LOGO -->
+    <div class="h-12 mb-3 flex items-center">
+      {% if job.logo %}
+        <img src="{{ job.logo.url }}" class="h-10 object-contain">
+      {% else %}
+        <div class="h-10 w-20 bg-gray-200 rounded"></div>
+      {% endif %}
+    </div>
+
+    <!-- TITLE -->
+    <h3 class="text-lg font-semibold text-blue-600">
+      {{ job.title }}
+    </h3>
+
+    <!-- COMPANY -->
+    <p class="text-gray-600 text-sm mt-1">
+      🏢 
+      <a href="/jobs/company/{{ job.company }}/" class="hover:underline font-medium">
+        {{ job.company }}
+      </a>
+    </p>
+
+    <!-- LOCATION -->
+    <p class="text-gray-500 text-sm mb-2">
+      📍 {{ job.location }}
+    </p>
+
+    <!-- DESCRIPTION -->
+    <p class="text-sm text-gray-700 min-h-[60px]">
+      {{ job.job_summary|default:"No description available"|truncatewords:12 }}
+    </p>
+
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="mt-4 space-y-2">
+
+    <!-- VIEW DETAILS -->
+    <button class="w-full border py-2 rounded-lg hover:bg-gray-50"
+            data-bs-toggle="modal"
+            data-bs-target="#jobModal{{ job.id }}">
+      👁 View Details
+    </button>
+
+    <!-- SAVE -->
+    <a href="/jobs/save/{{ job.id }}/"
+       class="block text-center border border-pink-500 text-pink-500 py-2 rounded-lg hover:bg-pink-50">
+      ❤️ Save Job
+    </a>
+
+    <!-- ACTION -->
+    {% if role == "candidate" %}
+
+      {% if job.id|stringformat:"s" in applied_jobs %}
+        <button class="w-full bg-green-500 text-white py-2 rounded-lg cursor-not-allowed">
+          ✅ Applied
+        </button>
+      {% else %}
+        <a href="/jobs/apply/{{ job.id }}/"
+           class="block text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+          Apply Now
+        </a>
+      {% endif %}
+
+    {% elif role == "admin" %}
+
+      <div class="flex gap-2">
+        <a href="/jobs/edit/{{ job.id }}/"
+           class="flex-1 text-center bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">
+          ✏ Edit
+        </a>
+
+        <a href="/jobs/delete/{{ job.id }}/"
+           class="flex-1 text-center bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+          🗑 Delete
+        </a>
+      </div>
+
+    {% else %}
+
+      <button class="w-full border border-blue-500 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal">
+        Login to Apply
+      </button>
+
+    {% endif %}
+
+    <!-- BADGE -->
+    <div class="text-xs bg-gray-100 text-gray-500 py-1 rounded text-center">
+      Posted Recently
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- MODAL -->
+<div class="modal fade" id="jobModal{{ job.id }}">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content p-4">
+
+      <h4>{{ job.title }}</h4>
+      <p class="text-muted">{{ job.company }} • {{ job.location }}</p>
+
+      <hr>
+
+      <p><b>Job Summary:</b></p>
+      <p>{{ job.job_summary|default:"Not provided" }}</p>
+
+      <p><b>Responsibilities:</b></p>
+      <p>{{ job.responsibilities|default:"Not provided" }}</p>
+
+      <p><b>Qualifications:</b></p>
+      <p>{{ job.required_qualifications|default:"Not provided" }}</p>
+
+      <p><b>Experience:</b> {{ job.experience_years|default:"N/A" }}</p>
+      <p><b>Salary:</b> {{ job.compensation|default:"Not disclosed" }}</p>
+
+      {% if job.benefits %}
+      <p><b>Benefits:</b> {{ job.benefits }}</p>
+      {% endif %}
+
+      <hr>
+
+      {% if role == "candidate" %}
+        {% if job.id|stringformat:"s" in applied_jobs %}
+          <button class="btn btn-success w-100" disabled>
+            ✅ Already Applied
+          </button>
+        {% else %}
+          <a href="/jobs/apply/{{ job.id }}/" class="btn btn-primary w-100">
+            Apply Now
+          </a>
+        {% endif %}
+      {% else %}
+        <button class="btn btn-outline-primary w-100"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal">
+          Login to Apply
+        </button>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
 {% endfor %}
+
+</div>
+
+{% endblock %}

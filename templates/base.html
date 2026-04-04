@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MD Consultancy</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+      <!-- Logo -->
+      <h1 class="text-2xl font-bold text-blue-600 tracking-wide">
+        MD Consultancy
+      </h1>
+
+      <!-- Links -->
+      <div class="flex items-center space-x-6 text-sm font-medium">
+<a href="/profile/" class="mr-4">Profile</a>
+        <a href="/jobs/" class="hover:text-blue-600 transition duration-200">
+          Jobs
+        </a>
+
+        {% if request.session.role == "admin" %}
+          <a href="/dashboard/" class="hover:text-blue-600 transition">
+            Dashboard
+          </a>
+
+          <a href="/candidates/" class="hover:text-blue-600 transition">
+            Candidates
+          </a>
+        {% endif %}
+
+        {% if request.session.role == "candidate" %}
+          <a href="/candidate-dashboard/" class="hover:text-blue-600 transition">
+            Dashboard
+          </a>
+        {% endif %}
+
+        <!-- Logout Button -->
+        <a href="/logout/" 
+           class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition shadow-sm">
+          Logout
+        </a>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-xl shadow-md p-6">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+</body>
+</html>

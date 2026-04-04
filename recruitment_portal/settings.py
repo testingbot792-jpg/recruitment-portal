@@ -1,24 +1,27 @@
-"""
-Django settings for recruitment_portal project.
-"""
-
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables FIRST
 load_dotenv()
 
-# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Security
-SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG") == "True"
+# SECURITY
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
+# ✅ IMPORTANT FOR RENDER
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "127.0.0.1",
+    "localhost"
+]
+
+# Sessions
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
-# Applications
+
+# Apps
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -33,6 +36,10 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # ✅ ADD THIS FOR RENDER
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,7 +68,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'recruitment_portal.wsgi.application'
 
-# Default DB (not used but Django requires it)
+# Dummy DB (Mongo used)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -69,26 +76,16 @@ DATABASES = {
     }
 }
 
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
+# Static files (IMPORTANT)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
+# ✅ WhiteNoise config
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Static files
-STATIC_URL = 'static/'
-
-# MongoDB Connection
+# MongoDB
 from mongoengine import connect
-connect(host=os.getenv("MONGO_URI"))
+connect(host=os.getenv("MONGO_URI", "mongodb://localhost:27017/recruitment"))
 
-# Email (for testing)
+# Email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
