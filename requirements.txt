@@ -1,5 +1,6 @@
 Django
 mongoengine
-bcrypt
 python-dotenv
+whitenoise
 gunicorn
+bcrypt
